@@ -1604,7 +1604,7 @@ export default function Home() {
               <div className="text-[hsl(38,15%,40%)] text-xs">We Save Hunger.</div>
             </div>
           </div>
-          <div className="text-[hsl(38,15%,30%)] text-xs text-center">© 2024 911 Foods — Emergency Taste Response</div>
+          <div className="text-[hsl(38,15%,30%)] text-xs text-center">© 2026 911 Foods — Emergency Taste Response</div>
           <div className="flex items-center gap-2 text-xs text-[hsl(38,15%,40%)]">
             <motion.span
               className="w-2 h-2 rounded-full bg-green-500 inline-block"
