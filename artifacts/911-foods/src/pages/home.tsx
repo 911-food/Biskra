@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import {
   motion,
   useScroll,
@@ -44,6 +44,7 @@ import {
   GiWineBottle,
 } from "react-icons/gi";
 import type { IconType } from "react-icons";
+import { getMenuPrices, getDealPrices } from "@/lib/priceStore";
 import logoImg from "@assets/528129323_17903813892232795_3929362443065509329_n_1778373364752.jpg";
 import menu1Img from "@assets/image_1778373360248.png";
 import menu2Img from "@assets/image_1778373362697.png";
@@ -724,11 +725,13 @@ function EmergencyCard({ category, onAddToCart }: { category: typeof menuCategor
 }
 
 /* ─── SOS BOX ─── */
-function SOSBox({ onAddToCart }: { onAddToCart: (name: string, price: number | string) => void }) {
+function SOSBox({ onAddToCart, priceFor }: { onAddToCart: (name: string, price: number | string) => void; priceFor: (name: string, fallback: number) => number }) {
   const [selected, setSelected] = useState<string | null>(null);
   const [revealed, setRevealed] = useState<{ name: string; price: number | string } | null>(null);
   const [spinning, setSpinning] = useState(false);
 
+  // Default prices are only a fallback — `priceFor` resolves the live,
+  // admin-edited price for each item by name so SOS Box never adds a stale price.
   const pools: Record<string, { name: string; price: number }[]> = {
     chicken: [
       { name: "Burger Crispy", price: 400 }, { name: "Tacos Crispy", price: 550 },
@@ -750,7 +753,10 @@ function SOSBox({ onAddToCart }: { onAddToCart: (name: string, price: number | s
     setRevealed(null);
     const pool = pools[type];
     const picked = pool[Math.floor(Math.random() * pool.length)];
-    setTimeout(() => { setRevealed(picked); setSpinning(false); }, 1800);
+    setTimeout(() => {
+      setRevealed({ name: picked.name, price: priceFor(picked.name, picked.price) });
+      setSpinning(false);
+    }, 1800);
   }
 
   return (
@@ -1084,6 +1090,63 @@ export default function Home() {
   const heroParallax = useTransform(scrollYProgress, [0, 0.3], [0, -80]);
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
 
+  // ── Live prices set from the admin panel ──
+  const [menuPriceOverrides, setMenuPriceOverrides] = useState<Record<string, number>>({});
+  const [dealPriceOverrides, setDealPriceOverrides] = useState<Record<string, number>>({});
+
+  useEffect(() => {
+    function refreshPrices() {
+      setMenuPriceOverrides(getMenuPrices());
+      setDealPriceOverrides(getDealPrices());
+    }
+    refreshPrices();
+    // Pick up changes saved from the admin panel in another tab, and re-sync
+    // when this tab regains focus (e.g. after editing prices then coming back).
+    window.addEventListener("storage", refreshPrices);
+    window.addEventListener("focus", refreshPrices);
+    return () => {
+      window.removeEventListener("storage", refreshPrices);
+      window.removeEventListener("focus", refreshPrices);
+    };
+  }, []);
+
+  const menuCategoriesLive = useMemo(
+    () =>
+      menuCategories.map((cat) => ({
+        ...cat,
+        items: cat.items.map((item) =>
+          item.name in menuPriceOverrides
+            ? { ...item, price: menuPriceOverrides[item.name] }
+            : item
+        ),
+      })),
+    [menuPriceOverrides]
+  );
+
+  const featuredItemsLive = useMemo(
+    () =>
+      featuredItems.map((item) =>
+        item.name in menuPriceOverrides
+          ? { ...item, price: menuPriceOverrides[item.name] }
+          : item
+      ),
+    [menuPriceOverrides]
+  );
+
+  const codeRedDealsLive = useMemo(
+    () =>
+      codeRedDeals.map((deal) =>
+        deal.title in dealPriceOverrides
+          ? { ...deal, newPrice: dealPriceOverrides[deal.title] }
+          : deal
+      ),
+    [dealPriceOverrides]
+  );
+
+  function priceFor(name: string, fallback: number) {
+    return name in menuPriceOverrides ? menuPriceOverrides[name] : fallback;
+  }
+
   function addToCart(name: string, price: number | string) {
     const numPrice = typeof price === "number" ? price : parseInt(String(price).split("/")[0]);
     setCartItems((prev) => [...prev, { name, price: numPrice, id: `${Date.now()}-${Math.random()}` }]);
@@ -1095,7 +1158,7 @@ export default function Home() {
     setCartItems((prev) => prev.filter((i) => i.id !== id));
   }
 
-  const activeCat = menuCategories.find((c) => c.id === activeCategory) || menuCategories[0];
+  const activeCat = menuCategoriesLive.find((c) => c.id === activeCategory) || menuCategoriesLive[0];
 
   return (
     <div className="min-h-screen bg-background overflow-x-hidden">
@@ -1154,7 +1217,7 @@ export default function Home() {
             onRemove={removeFromCart}
             onClose={() => setCartOpen(false)}
             hasDrink={cartItems.some(item =>
-              (menuCategories.find(c => c.id === "boissons")?.items ?? []).some(i => i.name === item.name)
+              (menuCategoriesLive.find(c => c.id === "boissons")?.items ?? []).some(i => i.name === item.name)
             )}
             onGoToDrinks={() => {
               setCartOpen(false);
@@ -1303,7 +1366,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto">
           {/* Category tabs — icon grid */}
           <motion.div variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid grid-cols-5 gap-3 mb-10">
-            {menuCategories.map((cat) => {
+            {menuCategoriesLive.map((cat) => {
               const isActive = activeCategory === cat.id;
               return (
                 <motion.button
@@ -1358,7 +1421,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto">
           <SectionHeader badge="Most Wanted Meals" title="Emergency Stars" sub="Les missions les plus demandées. Commandez avant rupture de stock." />
           <motion.div variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true, margin: "-60px" }} className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {featuredItems.map((item, i) => (
+            {featuredItemsLive.map((item, i) => (
               <motion.div key={item.id} variants={fadeUp}>
                 <TiltCard className="relative bg-card border border-border rounded-sm p-6 overflow-hidden h-full">
                   {/* Top accent bar */}
@@ -1409,7 +1472,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto">
           <SectionHeader dark badge="Emergency Deals" title="NOS BOXES" sub="Rescue Combos disponibles. Ne laissez pas votre faim gagner." />
           <motion.div variants={stagger} initial="show" animate="show" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {codeRedDeals.map((deal) => (
+            {codeRedDealsLive.map((deal) => (
               <motion.div
                 key={deal.id}
                 initial={{ opacity: 0, y: 30 }}
@@ -1453,7 +1516,7 @@ export default function Home() {
       <Section className="py-20 px-4 sm:px-6 bg-muted/40" id="sos">
         <div className="max-w-6xl mx-auto">
           <SectionHeader badge="Indecision Emergency" title="SOS Box" sub="Vous ne savez pas quoi commander? Choisissez votre protéine — on fait le reste." />
-          <SOSBox onAddToCart={addToCart} />
+          <SOSBox onAddToCart={addToCart} priceFor={priceFor} />
         </div>
       </Section>
 
