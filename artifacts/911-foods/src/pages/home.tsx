@@ -259,7 +259,7 @@ function AnimatedCounter({ target, suffix = "", duration = 1800 }: { target: num
 }
 
 /* ─── FLOATING CALL CTA ─── */
-function FloatingCTA() {
+function FloatingCTA({ hidden = false }: { hidden?: boolean }) {
   const [visible, setVisible] = useState(false);
   const { scrollY } = useScroll();
   useEffect(() => {
@@ -267,7 +267,7 @@ function FloatingCTA() {
   }, [scrollY]);
   return (
     <AnimatePresence>
-      {visible && (
+      {visible && !hidden && (
         <motion.a
           href="tel:0771479840"
           initial={{ opacity: 0, scale: 0.75, y: 24 }}
@@ -1592,7 +1592,7 @@ export default function Home() {
         </div>
       </section>
 
-      <FloatingCTA />
+      <FloatingCTA hidden={cartOpen} />
 
       {/* ─── FOOTER ─── */}
       <footer className="py-8 px-4 bg-[hsl(20,15%,8%)] border-t border-[hsl(20,12%,15%)]" data-testid="footer">
