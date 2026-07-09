@@ -1,0 +1,156 @@
+{
+  "categories": [
+    {
+      "id": "burger",
+      "name": "Burger",
+      "heatLevel": 3,
+      "prepTime": "8 min",
+      "tag": "Most Rescued",
+      "items": [
+        {"name": "Burger Viande", "price": "300"},
+        {"name": "Burger Crispy", "price": "400"},
+        {"name": "Burger Double", "price": "500"},
+        {"name": "Burger 911", "price": "600"}
+      ]
+    },
+    {
+      "id": "pizza",
+      "name": "Pizza",
+      "heatLevel": 2,
+      "prepTime": "15 min",
+      "tag": "Fan Favorite",
+      "note": "M / L / XL",
+      "items": [
+        {"name": "Pizza Marguerite", "price": "300 / 700 / 1000"},
+        {"name": "Pizza Poulet", "price": "500 / 1100 / 1700"},
+        {"name": "Pizza Viande", "price": "500 / 1100 / 1700"},
+        {"name": "Pizza Thon", "price": "500 / 1100 / 1700"},
+        {"name": "Pizza Poulet Fumée", "price": "600 / 1200 / 1800"},
+        {"name": "Pizza Pepperoni", "price": "600 / 1200 / 1800"},
+        {"name": "Pizza 04 Season", "price": "700 / 1500 / 2500"},
+        {"name": "Pizza 04 Fromage", "price": "800 / 1500 / 2500"},
+        {"name": "Pizza Chèvre Miel", "price": "1000"}
+      ]
+    },
+    {
+      "id": "tacos",
+      "name": "Tacos",
+      "heatLevel": 4,
+      "prepTime": "10 min",
+      "tag": "Top Seller",
+      "items": [
+        {"name": "Tacos Chawerma", "price": "450"},
+        {"name": "Tacos Viande", "price": "450"},
+        {"name": "Tacos Crispy", "price": "550"},
+        {"name": "Tacos Foie", "price": "550"},
+        {"name": "Tacos Mix", "price": "600"}
+      ]
+    },
+    {
+      "id": "pasta",
+      "name": "Pasta",
+      "heatLevel": 1,
+      "prepTime": "12 min",
+      "tag": "Comfort Food",
+      "items": [
+        {"name": "Pasta Poulet", "price": "600"},
+        {"name": "Pasta Crispy", "price": "700"},
+        {"name": "Pasta 04 Fromage", "price": "800"}
+      ]
+    },
+    {
+      "id": "calzone",
+      "name": "Calzone",
+      "heatLevel": 2,
+      "prepTime": "14 min",
+      "tag": "Premium Pick",
+      "items": [
+        {"name": "Calzone Poulet", "price": "600"},
+        {"name": "Calzone Viande", "price": "600"},
+        {"name": "Calzone Foie", "price": "700"},
+        {"name": "Calzone Thon", "price": "600"}
+      ]
+    },
+    {
+      "id": "panuazzo",
+      "name": "Panuazzo",
+      "heatLevel": 2,
+      "prepTime": "10 min",
+      "tag": "Rescue Fav",
+      "items": [
+        {"name": "Panuazzo Poulet", "price": "600"},
+        {"name": "Panuazzo Viande", "price": "600"},
+        {"name": "Panuazzo Crispy", "price": "600"},
+        {"name": "Panuazzo Foie", "price": "700"}
+      ]
+    },
+    {
+      "id": "tunisien",
+      "name": "Tunisiens",
+      "heatLevel": 3,
+      "prepTime": "8 min",
+      "tag": "Street Classic",
+      "items": [
+        {"name": "Tunisien Chawerma", "price": "400"},
+        {"name": "Tunisien Viande", "price": "400"},
+        {"name": "Tunisien Crispy", "price": "500"},
+        {"name": "Tunisien Foie", "price": "500"},
+        {"name": "Tunisien Mixt", "price": "550"}
+      ]
+    },
+    {
+      "id": "malfouf",
+      "name": "Malfouf",
+      "heatLevel": 2,
+      "prepTime": "8 min",
+      "tag": "Quick Rescue",
+      "items": [
+        {"name": "Malfouf Chawerma", "price": "350"},
+        {"name": "Malfouf Viande", "price": "350"},
+        {"name": "Malfouf Crispy", "price": "450"},
+        {"name": "Malfouf Foie", "price": "450"},
+        {"name": "Malfouf Mix", "price": "500"}
+      ]
+    },
+    {
+      "id": "magloub",
+      "name": "Magloub",
+      "heatLevel": 2,
+      "prepTime": "10 min",
+      "tag": "Hidden Gem",
+      "items": [
+        {"name": "Magloub Chawerma", "price": "500"},
+        {"name": "Magloub Viande", "price": "500"},
+        {"name": "Magloub Crispy", "price": "600"},
+        {"name": "Magloub Foie", "price": "700"}
+      ]
+    },
+    {
+      "id": "poutine",
+      "name": "Poutine",
+      "heatLevel": 1,
+      "prepTime": "7 min",
+      "tag": "Midnight Rescue",
+      "items": [
+        {"name": "Poutine Chawerma", "price": "450"},
+        {"name": "Poutine Viande", "price": "450"},
+        {"name": "Poutine Crispy", "price": "550"}
+      ]
+    },
+    {
+      "id": "boissons",
+      "name": "Boissons",
+      "heatLevel": 0,
+      "prepTime": "1 min",
+      "tag": "مشروبات",
+      "items": [
+        {"name": "Farha فرحة — 33cl", "price": "50"},
+        {"name": "Farha فرحة — 1L", "price": "100"},
+        {"name": "Hamoud حمود — 33cl", "price": "60"},
+        {"name": "Hamoud حمود — 1L", "price": "120"},
+        {"name": "Jus عصير — 33cl", "price": "70"},
+        {"name": "Coca-Cola كوكا كولا", "price": "150"}
+      ]
+    }
+  ]
+}
